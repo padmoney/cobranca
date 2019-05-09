@@ -21,7 +21,7 @@ type Boleto struct {
 	dataDocumento     time.Time
 	dataProcessamento time.Time
 	dataVencimento    time.Time
-	numero            int
+	numero            int64
 	nossoNumero       string
 	campoLivre        string
 	conta             Conta
@@ -29,7 +29,7 @@ type Boleto struct {
 	avalista          Avalista
 }
 
-func NewBoleto(valor float64, dataVencimento time.Time, numero int, conta Conta) (Boleto, error) {
+func NewBoleto(valor float64, dataVencimento time.Time, numero int64, conta Conta) (Boleto, error) {
 	boleto := Boleto{
 		valor:          valor,
 		dataVencimento: dataVencimento,
@@ -82,7 +82,7 @@ func (b Boleto) NossoNumero() string {
 	return b.nossoNumero
 }
 
-func (b Boleto) Numero() int {
+func (b Boleto) Numero() int64 {
 	return b.numero
 }
 

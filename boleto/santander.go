@@ -29,6 +29,6 @@ func (s Santander) NossoNumero() string {
 }
 
 func (s Santander) codigoBarrasSemDV() string {
-	n := strconv.Itoa(s.boleto.Numero())
+	n := strconv.FormatInt(s.boleto.Numero(), 10)
 	return Zeros(n, 12)
 }
