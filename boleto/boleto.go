@@ -7,10 +7,6 @@ import (
 	"github.com/padmoney/cobranca"
 )
 
-const (
-	bancoNaoSuportado = "Banco não suportado."
-)
-
 type BoletoGenerator interface {
 	NossoNumero() string
 	CampoLivre() string
@@ -24,14 +20,14 @@ type Boleto struct {
 	numero            int64
 	nossoNumero       string
 	campoLivre        string
-	conta             Conta
+	conta             cobranca.Conta
 	pagador           Pagador
 	avalista          Avalista
 	codigoBarras      string
 	linhaDigitavel    string
 }
 
-func NewBoleto(valor float64, dataVencimento time.Time, numero int64, conta Conta) (Boleto, error) {
+func NewBoleto(valor float64, dataVencimento time.Time, numero int64, conta cobranca.Conta) (Boleto, error) {
 	boleto := Boleto{
 		valor:          valor,
 		dataVencimento: dataVencimento,
@@ -44,7 +40,7 @@ func NewBoleto(valor float64, dataVencimento time.Time, numero int64, conta Cont
 	case cobranca.CodigoSantander:
 		bg = NewSantander(boleto)
 	default:
-		return boleto, errors.New(bancoNaoSuportado)
+		return boleto, errors.New(cobranca.BancoNaoSuportado)
 	}
 	boleto.nossoNumero = bg.NossoNumero()
 	boleto.campoLivre = bg.CampoLivre()
@@ -61,7 +57,7 @@ func (b Boleto) CodigoBarras() string {
 	return b.codigoBarras
 }
 
-func (b Boleto) Conta() Conta {
+func (b Boleto) Conta() cobranca.Conta {
 	return b.conta
 }
 

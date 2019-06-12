@@ -1,4 +1,4 @@
-package boleto
+package cobranca
 
 type Conta struct {
 	Banco         string

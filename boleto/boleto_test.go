@@ -14,7 +14,7 @@ func TestNewBoleto(t *testing.T) {
 	today := time.Now().Local().Format(dateFormat)
 	valor := 273.71
 
-	c := NewConta(cobranca.CodigoSantander, "4042", "61900", "101", "0282033")
+	c := cobranca.NewConta(cobranca.CodigoSantander, "4042", "61900", "101", "0282033")
 
 	b, _ := NewBoleto(valor, venc, 1984, c)
 
@@ -52,7 +52,7 @@ func TestNewBoleto(t *testing.T) {
 }
 
 func TestBoletoBancoNaoSuportado(t *testing.T) {
-	c := NewConta("999", "4042", "61900", "101", "0282033")
+	c := cobranca.NewConta("999", "4042", "61900", "101", "0282033")
 	_, err := NewBoleto(1, time.Now(), 1984, c)
 
 	if err == nil {

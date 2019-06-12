@@ -1,9 +1,7 @@
-package boleto
+package cobranca
 
 import (
 	"testing"
-
-	"github.com/padmoney/cobranca"
 )
 
 func TestNewConta(t *testing.T) {
@@ -12,10 +10,10 @@ func TestNewConta(t *testing.T) {
 	carteira := "01"
 	convenio := "123456789"
 
-	c := NewConta(cobranca.CodigoBancoBrasil, agencia, contaCorrente, carteira, convenio)
+	c := NewConta(CodigoBancoBrasil, agencia, contaCorrente, carteira, convenio)
 
-	if c.Banco != cobranca.CodigoBancoBrasil {
-		t.Errorf("Expected '%s' got '%s'", cobranca.CodigoBancoBrasil, c.Banco)
+	if c.Banco != CodigoBancoBrasil {
+		t.Errorf("Expected '%s' got '%s'", CodigoBancoBrasil, c.Banco)
 	}
 
 	if c.Agencia != agencia {

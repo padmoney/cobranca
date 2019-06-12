@@ -31,6 +31,6 @@ func TestBoletoSantanderSemRegistro(t *testing.T) {
 	}
 }
 
-func contaSantanderFixture(carteira, convenio string) Conta {
-	return NewConta(cobranca.CodigoSantander, "4042", "61900", carteira, convenio)
+func contaSantanderFixture(carteira, convenio string) cobranca.Conta {
+	return cobranca.NewConta(cobranca.CodigoSantander, "4042", "61900", carteira, convenio)
 }
