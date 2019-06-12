@@ -27,6 +27,8 @@ type Boleto struct {
 	conta             Conta
 	pagador           Pagador
 	avalista          Avalista
+	codigoBarras      string
+	linhaDigitavel    string
 }
 
 func NewBoleto(valor float64, dataVencimento time.Time, numero int64, conta Conta) (Boleto, error) {
@@ -50,10 +52,13 @@ func NewBoleto(valor float64, dataVencimento time.Time, numero int64, conta Cont
 }
 
 func (b Boleto) CodigoBarras() string {
-	return CodigoBarras{Banco: b.conta.Banco,
-		Valor:          b.valor,
-		DataVencimento: b.dataVencimento,
-		CampoLivre:     b.campoLivre}.String()
+	if b.codigoBarras == "" {
+		b.codigoBarras = CodigoBarras{Banco: b.conta.Banco,
+			Valor:          b.valor,
+			DataVencimento: b.dataVencimento,
+			CampoLivre:     b.campoLivre}.String()
+	}
+	return b.codigoBarras
 }
 
 func (b Boleto) Conta() Conta {
@@ -69,9 +74,11 @@ func (b Boleto) DataVencimento() time.Time {
 }
 
 func (b Boleto) LinhaDigitavel() string {
-	cb := b.CodigoBarras()
-	l, _ := LinhaDigitavel{}.Calculate(cb)
-	return l
+	if b.linhaDigitavel == "" {
+		cb := b.CodigoBarras()
+		b.linhaDigitavel, _ = LinhaDigitavel{}.Calculate(cb)
+	}
+	return b.linhaDigitavel
 }
 
 func (b Boleto) LocalPagamento() string {

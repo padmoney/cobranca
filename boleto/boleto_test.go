@@ -8,7 +8,6 @@ import (
 )
 
 func TestNewBoleto(t *testing.T) {
-
 	dateFormat := "2006-01-02"
 	localPagto := "Pagável em qualquer banco até o vencimento."
 	venc := Date(2003, 05, 15)
