@@ -21,8 +21,6 @@ type Boleto struct {
 	nossoNumero       string
 	campoLivre        string
 	conta             cobranca.Conta
-	pagador           Pagador
-	avalista          Avalista
 	codigoBarras      string
 	linhaDigitavel    string
 }

@@ -9,8 +9,9 @@ func TestNewConta(t *testing.T) {
 	contaCorrente := "567890"
 	carteira := "01"
 	convenio := "123456789"
+	beneficiario := Beneficiario{}
 
-	c := NewConta(CodigoBancoBrasil, agencia, contaCorrente, carteira, convenio)
+	c := NewConta(CodigoBancoBrasil, agencia, contaCorrente, carteira, convenio, beneficiario)
 
 	if c.Banco != CodigoBancoBrasil {
 		t.Errorf("Expected '%s' got '%s'", CodigoBancoBrasil, c.Banco)

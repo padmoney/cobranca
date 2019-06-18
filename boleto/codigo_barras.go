@@ -4,6 +4,8 @@ import (
 	"math"
 	"strconv"
 	"time"
+
+	"github.com/padmoney/cobranca"
 )
 
 type CodigoBarras struct {
@@ -15,10 +17,10 @@ type CodigoBarras struct {
 }
 
 func (cb CodigoBarras) String() string {
-	banco := StrPad(cb.Banco, 3, "0", StrPadLeft)
+	banco := cobranca.StrPad(cb.Banco, 3, "0", cobranca.StrPadLeft)
 	val := math.Round(cb.Valor * 100)
 	valStr := strconv.Itoa(int(val))
-	valStr = Zeros(valStr, 10)
+	valStr = cobranca.Zeros(valStr, 10)
 	fatorVencimento := FatorVencimento(cb.DataVencimento)
 
 	s := banco + cb.Moeda() + fatorVencimento + valStr + cb.CampoLivre
@@ -42,5 +44,5 @@ func FatorVencimento(d time.Time) string {
 	delta := d.Sub(base)
 	days := delta.Hours() / 24
 	s := strconv.Itoa(int(days))
-	return Zeros(s, 4)
+	return cobranca.Zeros(s, 4)
 }

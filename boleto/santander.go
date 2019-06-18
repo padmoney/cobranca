@@ -2,6 +2,8 @@ package boleto
 
 import (
 	"strconv"
+
+	"github.com/padmoney/cobranca"
 )
 
 type Santander struct {
@@ -13,9 +15,9 @@ func NewSantander(boleto Boleto) Santander {
 }
 
 func (s Santander) CampoLivre() string {
-	convenio := Zeros(s.boleto.Conta().Convenio, 7)
-	carteira := Zeros(s.boleto.Conta().Carteira, 3)
-	nossoNumero := OnlyNumbers(s.NossoNumero())
+	convenio := cobranca.Zeros(s.boleto.Conta().Convenio, 7)
+	carteira := cobranca.Zeros(s.boleto.Conta().Carteira, 3)
+	nossoNumero := cobranca.OnlyNumbers(s.NossoNumero())
 	return "9" + convenio + nossoNumero + "0" + carteira
 }
 
@@ -30,5 +32,5 @@ func (s Santander) NossoNumero() string {
 
 func (s Santander) codigoBarrasSemDV() string {
 	n := strconv.FormatInt(s.boleto.Numero(), 10)
-	return Zeros(n, 12)
+	return cobranca.Zeros(n, 12)
 }

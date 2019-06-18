@@ -2,47 +2,77 @@ package remessa
 
 import (
 	"errors"
+	"fmt"
+	"strings"
 
 	"github.com/padmoney/cobranca"
 )
 
-type RemessaGenerator interface {
+const (
+	CNAB400 = "cnab400"
+
+	ComandoCancelamento = "cancelamento"
+	ComandoRegistro     = "registro"
+
+	layoutRemessaNaoSuportado = "Layout do arquivo de remessa não é suportado."
+)
+
+type geradorRemessa interface {
+	Trailler() string
+	Header() string
+	Pagamentos(pagamentos []Pagamento) ([]string, error)
 }
 
 type Remessa struct {
-	Generator RemessaGenerator
+	layout     string
+	conta      cobranca.Conta
+	params     Params
+	sequencial int64
+	gerador    geradorRemessa
+
+	pagamentos []Pagamento
 }
 
-func New(conta cobranca.Conta, params Params, sequential int64) (Remessa, error) {
-	remessa := Remessa{}
-
+func New(layout string, conta cobranca.Conta, params Params, sequencial int64) (*Remessa, error) {
+	remessa := &Remessa{
+		conta:      conta,
+		params:     params,
+		sequencial: sequencial}
+	if strings.ToLower(layout) != CNAB400 {
+		return remessa, errors.New(layoutRemessaNaoSuportado)
+	}
 	switch conta.Banco {
 	case cobranca.CodigoSantander:
-		remessa.Generator = NewSantander(conta, params, sequential)
+		remessa.gerador = NewSantanderCNAB400(conta, params)
 	default:
+
 		return remessa, errors.New(cobranca.BancoNaoSuportado)
 	}
 	return remessa, nil
 }
 
-/*
-   public function __construct($conta, array $params = [])
-   {
-       $this->conta = $conta;
-       $this->params = $params;
+func (r *Remessa) AddPagamento(p Pagamento) error {
+	r.pagamentos = append(r.pagamentos, p)
+	return nil
+}
 
-       $agencia = explode('-', $conta->agencia());
-       $this->agencia = isset($agencia[0]) ? $agencia[0] : $conta->agencia();
-       $this->agencia_dv = $this->digitoAgencia();
+func (r Remessa) NomeArquivo() string {
+	return fmt.Sprintf("REMESSA_%d.rem", r.sequencial)
+}
 
-       $conta_numero = explode('-', $conta->contaCorrente());
-       $this->conta_numero = isset($conta_numero[0]) ? $conta_numero[0] : $conta->contaCorrente();
-       $this->conta_dv = isset($conta_numero[1]) ? $conta_numero[1] : '';
+func (r Remessa) Linhas() (linhas []string, err error) {
+	header := r.gerador.Header()
+	linhas = append(linhas, header)
 
-       $this->nome_cedente = $conta->beneficiario()->nome();
-       $this->carteira = $conta->carteira();
-       $this->convenio = $conta->convenio();
-       $this->variacao =  $conta->variacao();
-       $this->sequencial_remessa = $conta->sequencialRemessa();
-   }
-*/
+	pagamentos, err := r.gerador.Pagamentos(r.pagamentos)
+	if err != nil {
+		return
+	}
+	for _, p := range pagamentos {
+		linhas = append(linhas, cobranca.Sanitize(p))
+	}
+
+	trailler := r.gerador.Trailler()
+	linhas = append(linhas, trailler)
+	return
+}

@@ -1,4 +1,4 @@
-package boleto
+package cobranca
 
 type Avalista struct {
 	Nome      string
@@ -22,4 +22,24 @@ func (p Pagador) GetDocumento() string {
 func (p Pagador) PessoaFisica() bool {
 	doc := p.GetDocumento()
 	return len(doc) == 11
+}
+
+func (p Pagador) TipoInscricao() string {
+	return tipoInscricao(p.Documento)
+}
+
+// TipoInscricao retorna o tipo de inscrição
+// 00 - ISENTO
+// 01 - CPF
+// 02 - CNPJ
+func tipoInscricao(doc string) string {
+	doc = SemMascara(doc)
+	switch len(doc) {
+	case 11:
+		return "01"
+	case 14:
+		return "02"
+	default:
+		return "00"
+	}
 }
