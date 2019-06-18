@@ -14,7 +14,9 @@ func TestCNAB400(t *testing.T) {
 		"0000000000000000                    " +
 		cobranca.Brancos("", 255) +
 		"000000001"
-	expectedDetalheAntesData := "1029999999900019140420123456713003758                         00000123000000 40100000000000000000    000000501000000012317071900000000001990330000001A"
+	expectedDetalheAntesData := "1029999999900019140420123456713003758                         00000123000000 40100000000000000000    0000005010000000123" +
+		DataFormatada(time.Now().AddDate(0, 1, 0)) +
+		"00000000001990330000001A"
 	expectedDetalheDepoisData := "000000000000000000000000000000000000000000000000000000000000000200000000000191NOME DO SACADO                          ENDERECO DO SACADO                      BAIRRO      29315732CACHOEIRO DE ITES                               I90      00 000002"
 
 	expectedDetalhe := expectedDetalheAntesData + DataFormatada(time.Now()) + expectedDetalheDepoisData
@@ -31,7 +33,7 @@ func TestCNAB400(t *testing.T) {
 
 	remessa.AddPagamento(p)
 
-	linhas, err := remessa.Strings()
+	linhas, err := remessa.Linhas()
 	if err != nil {
 		t.Errorf("There should not be an error, error: %s", err)
 	}
