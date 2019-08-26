@@ -7,9 +7,13 @@ import (
 	"github.com/padmoney/cobranca"
 )
 
+const (
+	errTipoConvenioNaoImplementado = "Tipo de convênio não implementado."
+)
+
 type BoletoGenerator interface {
-	NossoNumero() string
-	CampoLivre() string
+	NossoNumero() (string, error)
+	CampoLivre() (string, error)
 }
 
 type Boleto struct {
@@ -34,14 +38,23 @@ func NewBoleto(valor float64, dataVencimento time.Time, numero int64, conta cobr
 	}
 
 	var bg BoletoGenerator
+	var err error
 	switch conta.Banco {
+	case cobranca.CodigoBancoBrasil:
+		bg = NewBancoBrasil(boleto)
 	case cobranca.CodigoSantander:
 		bg = NewSantander(boleto)
 	default:
 		return boleto, errors.New(cobranca.BancoNaoSuportado)
 	}
-	boleto.nossoNumero = bg.NossoNumero()
-	boleto.campoLivre = bg.CampoLivre()
+	boleto.nossoNumero, err = bg.NossoNumero()
+	if err != nil {
+		return boleto, err
+	}
+	boleto.campoLivre, err = bg.CampoLivre()
+	if err != nil {
+		return boleto, err
+	}
 	return boleto, nil
 }
 
