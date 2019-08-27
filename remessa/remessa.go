@@ -42,10 +42,11 @@ func New(layout string, conta cobranca.Conta, params Params, sequencial int64) (
 		return remessa, errors.New(layoutRemessaNaoSuportado)
 	}
 	switch conta.Banco {
+	case cobranca.CodigoBancoBrasil:
+		remessa.gerador = NewBancoBrasilCNAB400(conta, params)
 	case cobranca.CodigoSantander:
 		remessa.gerador = NewSantanderCNAB400(conta, params)
 	default:
-
 		return remessa, errors.New(cobranca.BancoNaoSuportado)
 	}
 	return remessa, nil

@@ -2,6 +2,7 @@ package boleto
 
 import (
 	"errors"
+	"strings"
 	"time"
 
 	"github.com/padmoney/cobranca"
@@ -94,6 +95,14 @@ func (b Boleto) LocalPagamento() string {
 
 func (b Boleto) NossoNumero() string {
 	return b.nossoNumero
+}
+
+func (b Boleto) NossoNumeroSemDV() string {
+	nn := strings.Split(b.nossoNumero, "-")
+	if len(nn) > 0 {
+		return nn[0]
+	}
+	return ""
 }
 
 func (b Boleto) Numero() int64 {

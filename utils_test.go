@@ -1,6 +1,10 @@
 package cobranca
 
-import "testing"
+import (
+	"reflect"
+	"testing"
+	"time"
+)
 
 func TestBrancos(t *testing.T) {
 	qote := "a long time ago"
@@ -14,6 +18,16 @@ func TestBrancos(t *testing.T) {
 	expected = "A LONG T"
 	if expected != got {
 		t.Errorf("Expected '%s' got '%s'", expected, got)
+	}
+}
+
+func TestDate(t *testing.T) {
+	now := time.Now()
+	expected := time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, time.UTC)
+
+	got := Date(now.Year(), int(now.Month()), now.Day())
+	if !reflect.DeepEqual(expected, got) {
+		t.Errorf("Expected '%v' got '%v'", expected, got)
 	}
 }
 
