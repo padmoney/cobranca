@@ -236,7 +236,7 @@ func (bb BancoBrasilCNAB400) registroMulta(p Pagamento, sequencial int) string {
 		"99",                         // 02. 5 002 a 003 X(002) Tipo de Serviço: “99” (Cobrança de Multa)
 		"2",                          // 03. 5 004 a 004 9(001) Código de Multa ['1' = Valor/'2' = Percentual]
 		bb.dataVencimento(p),         // 04. 5 005 a 010 9(006) Data de Inicio da Cobrança da Multa
-		ValorFormatado(multa, 11, 2), // 05. 5 011 a 022 9(012) Valor/Percentual da Multa
+		ValorFormatado(multa, 10, 2), // 05. 5 011 a 022 9(012) Valor/Percentual da Multa
 		cobranca.Brancos("", 372),    // 06. 5 023 a 394 9(372) Complemento do Registro: “Brancos”
 		cobranca.Zeros(strconv.Itoa(sequencial), 6), // 50.7 395 a 400 9(006) Sequencial de Registro
 	)
