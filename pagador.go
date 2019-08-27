@@ -15,6 +15,10 @@ type Pagador struct {
 	CEP       string
 }
 
+func (p Pagador) GetCEP() string {
+	return OnlyNumbers(p.CEP)
+}
+
 func (p Pagador) GetDocumento() string {
 	return OnlyNumbers(p.Documento)
 }

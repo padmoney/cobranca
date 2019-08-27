@@ -7,7 +7,6 @@ type Conta struct {
 	Agencia       string
 	ContaCorrente string
 	Carteira      string
-	Variacao      string
 	Convenio      string
 	EspecieTitulo string
 	Aceite        bool

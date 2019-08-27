@@ -7,7 +7,7 @@ import (
 	"github.com/padmoney/cobranca"
 )
 
-func TestCNAB400(t *testing.T) {
+func TestSantanderCNAB400(t *testing.T) {
 
 	expectedHeader := "01REMESSA01COBRANCA       17777751042700080112ACME CORPORATION              033SANTANDER      " +
 		DataFormatada(time.Now()) +
@@ -97,24 +97,6 @@ func fixturePagamento(valor float64, dataVencimento time.Time, numero, nossoNume
 		UF:        "ES",
 	}
 	return NewPagamento("registro", valor, dataVencimento, numero, nossoNumero, 30, 1.0, 1.0, pagador, avalista)
-	/*
-
-	   private function novoPagamento($valor, $data_vencimento, $numero, $nosso_numero = null,
-	       $dias_protesto = 30,
-	       $percentual_mora_ao_mes = 1,
-	       $percentual_multa = 1,
-	       $avalista = []
-	   ) {
-	       empty($nosso_numero) && $nosso_numero = $numero;
-	       $pagador = [
-	       ];
-	       return new Pagamento('registro', $valor, $data_vencimento, $numero, $nosso_numero,
-	           $dias_protesto,
-	           $percentual_mora_ao_mes,
-	           $percentual_multa,
-	           $pagador);
-	   }
-	*/
 }
 
 func fixtureParams() Params {

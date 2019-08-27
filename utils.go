@@ -5,6 +5,7 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+	"time"
 )
 
 type PadType string
@@ -51,6 +52,10 @@ func BrancosLeft(s string, l int) string {
 		return s[len(s)-l:]
 	}
 	return StrPad(s, l, " ", StrPadLeft)
+}
+
+func Date(year, month, day int) time.Time {
+	return time.Date(year, time.Month(month), day, 0, 0, 0, 0, time.UTC)
 }
 
 func OnlyNumbers(s string) string {
