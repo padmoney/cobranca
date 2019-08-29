@@ -1,8 +1,8 @@
 package retorno
 
 import (
+	"bufio"
 	"errors"
-	"io"
 	"os"
 	"strings"
 
@@ -74,28 +74,17 @@ func (r Retorno) Read(path string) (registros []Registro, err error) {
 	}
 	defer file.Close()
 
-	//const BufferSize = 100
-	buf := make([]byte, 32*1024) // define your buffer size here.
-	for {
-		n, err := file.Read(buf)
-		if err == io.EOF {
-			break
-		}
-		if err != nil {
-			break
-		}
-
-		if n > 0 {
-			linha := string(buf[:n])
-			linhas := strings.Split(linha, "\n")
-			for _, l := range linhas {
-				registro, err := rb.LerLinha(l)
-				if err != nil {
-					break
-				}
-				if registro.ID == idRegistroDetalhe {
-					registros = append(registros, registro)
-				}
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		linha := scanner.Text()
+		linhas := strings.Split(linha, "\n")
+		for _, l := range linhas {
+			registro, err := rb.LerLinha(l)
+			if err != nil {
+				break
+			}
+			if registro.ID == idRegistroDetalhe {
+				registros = append(registros, registro)
 			}
 		}
 	}

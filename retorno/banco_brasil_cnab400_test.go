@@ -20,7 +20,7 @@ func TestBancoBrasilCNAB400(t *testing.T) {
 	}
 
 	r1 := registros[0]
-	nn1 := "29948060000004600-7"
+	nn1 := "12345670000004600-5"
 	if r1.NossoNumero != nn1 {
 		t.Errorf("Expected '%s', got '%s'", nn1, r1.NossoNumero)
 	}
