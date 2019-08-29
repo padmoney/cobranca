@@ -80,7 +80,7 @@ func (bb *BancoBrasilCNAB400) Pagamentos(pagamentos []Pagamento) (lines []string
 			cobranca.Brancos(bb.aceite(), 1),                 // 29.7 150 a 150 X(001) Aceite do Título
 			DataFormatada(time.Now()),                        // 30.7 151 a 156 9(006) Data de Emissão: Informe no formato “DDMMAA”
 			bb.instrucaoCodificada(p.Comando()),              // 31.7 157 a 158 9(002) Instrução Codificada
-			"00",                                             // 32.7 159 a 160 9(002) Instrução Codificada
+			"07",                                             // 32.7 159 a 160 9(002) Instrução Codificada
 			ValorFormatado(p.JurosMoraPorDiaAtraso(), 11, 2), // 33.7 161 a 173 9(011)v99 Juros de Mora por Dia de Atraso
 			"000000",                                          // 34.7 174 a 179 9(006) Data Limite para Concessão de Desconto/Data de Operação do BBVendor/Juros de Mora
 			ValorFormatado(0, 11, 2),                          // 35.7 180 a 192 9(011)v99 Valor do Desconto
