@@ -44,7 +44,7 @@ func (bb BancoBrasil) NossoNumero() (string, error) {
 	if err != nil {
 		return "", err
 	}
-	dv, err := Modulo11{}.Calculate(cb)
+	dv, err := NossoNumero(cb).BancoBrasil().DV()
 	if err != nil {
 		return "", err
 	}
