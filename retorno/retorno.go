@@ -62,12 +62,6 @@ func (r Retorno) Read(path string) (registros []Registro, err error) {
 		return
 	}
 
-	var rb RetornoBanco
-	switch r.banco {
-	case cobranca.CodigoBancoBrasil:
-		rb = NewBancoBrasilCNAB400()
-	}
-
 	file, err := os.Open(path)
 	if err != nil {
 		return
@@ -76,16 +70,36 @@ func (r Retorno) Read(path string) (registros []Registro, err error) {
 
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
-		linha := scanner.Text()
-		linhas := strings.Split(linha, "\n")
-		for _, l := range linhas {
-			registro, err := rb.LerLinha(l)
-			if err != nil {
-				break
-			}
-			if registro.ID == idRegistroDetalhe {
-				registros = append(registros, registro)
-			}
+		linhas := strings.Split(scanner.Text(), "\n")
+		r, e := r.read(linhas)
+		if e != nil {
+			err = e
+			break
+		}
+		registros = append(registros, r...)
+	}
+	return
+}
+
+func (r Retorno) ReadFile(content []byte) ([]Registro, error) {
+	linhas := strings.Split(string(content), "\n")
+	return r.read(linhas)
+}
+
+func (r Retorno) read(linhas []string) (registros []Registro, err error) {
+	var rb RetornoBanco
+	switch r.banco {
+	case cobranca.CodigoBancoBrasil:
+		rb = NewBancoBrasilCNAB400()
+	}
+
+	for _, l := range linhas {
+		registro, err := rb.LerLinha(l)
+		if err != nil {
+			break
+		}
+		if registro.ID == idRegistroDetalhe {
+			registros = append(registros, registro)
 		}
 	}
 	return
