@@ -91,15 +91,17 @@ func (r Retorno) read(linhas []string) (registros []Registro, err error) {
 	switch r.banco {
 	case cobranca.CodigoBancoBrasil:
 		rb = NewBancoBrasilCNAB400()
+	case cobranca.CodigoSantander:
+		rb = NewSantanderCNAB400()
 	}
 
 	for _, l := range linhas {
-		registro, err := rb.LerLinha(l)
+		reg, err := rb.LerLinha(l)
 		if err != nil {
 			break
 		}
-		if registro.ID == idRegistroDetalhe {
-			registros = append(registros, registro)
+		if reg.ID != "" {
+			registros = append(registros, reg)
 		}
 	}
 	return
