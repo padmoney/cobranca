@@ -20,9 +20,10 @@ func (b BancoBrasilCNAB400) LerLinha(linha string) (r Registro, err error) {
 	if linha == "" {
 		return
 	}
+
 	r.ID = linha[0:1]
 	switch r.ID {
-	case idRegistroHeader:
+	case "0":
 		if linha[1:9] != "2RETORNO" {
 			err = errors.New("Tipo de Operação inválido.")
 			return
@@ -31,9 +32,11 @@ func (b BancoBrasilCNAB400) LerLinha(linha string) (r Registro, err error) {
 			err = errors.New("Tipo de Serviço inválido.")
 			return
 		}
-	case idRegistroDetalhe:
+		r.ID = ""
+	case "7":
 		r, err = b.lerDetalhe(r, linha)
-	case idRegistroTrailer:
+	case "9":
+		r.ID = ""
 	}
 	return
 }

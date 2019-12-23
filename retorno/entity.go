@@ -2,12 +2,6 @@ package retorno
 
 import "time"
 
-const (
-	idRegistroHeader  = "0"
-	idRegistroDetalhe = "7"
-	idRegistroTrailer = "9"
-)
-
 type Registro struct {
 	ID                 string
 	TipoCobranca       string
