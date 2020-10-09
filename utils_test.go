@@ -19,6 +19,12 @@ func TestBrancos(t *testing.T) {
 	if expected != got {
 		t.Errorf("Expected '%s' got '%s'", expected, got)
 	}
+
+	got = Brancos("Todrigo Martins / 50%comissao serly , Claudia , marisa , Hilda ", 40)
+	expected = "TODRIGO MARTINS / 50% COMISSAO SERLY , C"
+	if expected != got {
+		t.Errorf("Expected '%s' got '%s'", expected, got)
+	}
 }
 
 func TestDate(t *testing.T) {

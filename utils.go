@@ -35,6 +35,7 @@ var (
 		"SS": regexp.MustCompile(`ß`),
 		"Z":  regexp.MustCompile(`ż`),
 		"TH": regexp.MustCompile(`þ`),
+		"% ": regexp.MustCompile(`%`),
 	}
 )
 
